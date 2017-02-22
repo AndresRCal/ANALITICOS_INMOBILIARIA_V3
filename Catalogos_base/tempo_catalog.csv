@@ -1,0 +1,42 @@
+NUMERO,TEMPORADA,ABREVIACION
+01,Invierno,INV
+02,Amor y Amistad,AYA
+03,Primavera,PRI
+04,Pascua,PAS
+05,Ninos,NIN
+06,Mamas,MAM
+07,Papas,PAP
+08,Vacaciones,VAC
+09,Olimpiadas (regreso a clases),REG
+10,Fiestas Patrias,FIE
+11,Aniversario,ANI
+12,Otono,OTO
+13,Encendidos,ENC
+14,Navidad,NAV
+15,Anio nuevo - Reyes,ANR
+B0,Piloto,B0
+B1,Bimestre 1,B1
+B2,Bimestre 2,B2
+B3,Bimestre 3,B3
+B4,Bimestre 4,B4
+B5,Bimestre 5,B5
+T1,Trimestre 1,T1
+T2,Trimestre 2,T2
+T3,Trimestre 3,T3
+T4,Trimestre 4,T4
+ATE,Atemporal,ATE
+C1,CUATRIMESTRE 1,C1
+C2,CUATRIMESTRE 2,C2
+C3,CUATRIMESTRE 3,C3
+M1,ENERO,M1
+M2,FEBRERO ,M2
+M3,MARZO,M3
+M4,ABRIL ,M4
+M5,MAYO,M5
+M6,JUNIO ,M6
+M7,JULIO ,M7
+M8,AGOSTO,M8
+M9,SEPTIEMBRE,M9
+M10,OCTUBRE,M10
+M11,NOVIEMBRE,M11
+M12,DICIEMBRE,M12
