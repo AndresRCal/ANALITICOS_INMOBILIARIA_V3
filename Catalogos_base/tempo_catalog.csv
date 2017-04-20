@@ -1,13 +1,13 @@
 NUMERO,TEMPORADA,ABREVIACION
-01,Invierno,INV
-02,Amor y Amistad,AYA
-03,Primavera,PRI
-04,Pascua,PAS
-05,Ninos,NIN
-06,Mamas,MAM
-07,Papas,PAP
-08,Vacaciones,VAC
-09,Olimpiadas (regreso a clases),REG
+1,Invierno,INV
+2,Amor y Amistad,AYA
+3,Primavera,PRI
+4,Pascua,PAS
+5,Ninos,NIN
+6,Mamas,MAM
+7,Papas,PAP
+8,Vacaciones,VAC
+9,Olimpiadas (regreso a clases),REG
 10,Fiestas Patrias,FIE
 11,Aniversario,ANI
 12,Otono,OTO
@@ -40,3 +40,4 @@ M9,SEPTIEMBRE,M9
 M10,OCTUBRE,M10
 M11,NOVIEMBRE,M11
 M12,DICIEMBRE,M12
+TB,TROFEO BONUS,TB

@@ -17,7 +17,12 @@ fecha=time.strftime("%x")
 hora= time.strftime("%X")
 Base_dir=os.getcwd()
 Base_Root='''D:\\soporte inmobi\\Promos\\Pase_a_produc\\'''
+
+
 TEMP_DESLLO=input("TEMPORADA A DESARROLLAR ANALITICOS?")
+#TEMP_DESLLO='2017_ATE_MARCH_D_20_24'
+
+
 print (TEMP_DESLLO)
 New_Base_Root=Base_Root+TEMP_DESLLO+'\\'
 print(New_Base_Root)
@@ -47,8 +52,12 @@ else:
 Cataloges_Root=New_Base_Root+os.sep+'Catalogos_base'+os.sep
 if not os.path.exists(Cataloges_Root):
     shutil.copytree(Base_dir+os.sep+"Catalogos_base"+os.sep,"Catalogos_base")
-    
+
+
 chosen_source=''    
+#chosen_source='1'
+
+
 while chosen_source not in ['0','1']:
     chosen_source=input(
 '''
@@ -64,7 +73,7 @@ while chosen_source not in ['0','1']:
 if chosen_source == '0':
     qry.queries_base(Work_Root)
 elif chosen_source == '1':
-    e_qry.establece_laBase(Base_dir,Work_Root)
+    e_qry.establece_laBase(New_Base_Root,Work_Root)
 else:
     print('HUBO UN ERROR LOS IDENTIFICADORES VALIDOS PARA LAS FUENTES SON SOLO 0 y 1')
     print('SE TOMA FUENTE DEFAULT: 0')
@@ -73,6 +82,7 @@ else:
 dzar.desmenuzar_brief(Work_Root,Cataloges_Root)
 
 chosen_opt=''
+#chosen_opt='S'
 while chosen_opt.upper() not in ['S','N']:
     chosen_opt=input('''
 
@@ -99,6 +109,7 @@ if chosen_opt.upper() == 'S':
     print('Calculando los analiticos de los productos de fideliacion')
     sals.analiticosproductos_fidelizacion(Work_Root)
     print('Muchas gracias el proceso ha finalizado!')
+    shutil.copy2(Base_dir+os.sep+"post_config_promos_report.py",Work_Root+os.sep+"Reporte_D_Configuracion.py")
     exit()
 if chosen_opt.upper() == 'N':
     print('''
@@ -112,6 +123,7 @@ if chosen_opt.upper() == 'N':
         if os.path.isfile('Salidas.py') == True:
             shutil.copy2("Salidas.py",Work_Root+os.sep+"Creacion_Adeacuacion_Ambiente_retomado.py")
             shutil.copy2("desmenuzar_briefs_V2.py",Work_Root+os.sep+"desmenuzar_briefs_V2.py")
+            shutil.copy2("post_config_promos_report.py",Work_Root+os.sep+"Reporte_D_Configuracion.py")
             print('Se copio el archivo Creacion_Adeacuacion_Ambiente_retomado.py a tu carpeta de trabajo con exito: \n',Work_Root+os.sep)
         else:
             print('No se puede encontrar el archivo Salidas.py dentro de la ruta: ',Base_dir) 

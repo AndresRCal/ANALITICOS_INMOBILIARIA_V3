@@ -264,31 +264,51 @@ def establece_laBase(Base_dir,Work_Root):
     # SOLICITO UN ARCHIVO EXCEL Y UN NOMBRE DE HOJA Y ME ASEGURO DE QUE REALMENTE EXISTE
     #==============================================================================
     band_arch='F'
+#    print(band_arch)
     try:
         while band_arch=='F':
+            
+            
             arch_negocio=str(input('''Dame el nombre del archivo provisto por Negocio a trabajar los analiticos:
                 '''))
+#            arch_negocio='PROMOCIONES ATEMPORALES 22_03_2017.xlsx'
+                
             sheet_name=str(input('''Nececito el nombre de la hoja con los briefs:
                 '''))
+#            sheet_name='Sheet1'  
+               
+            print(Base_dir+os.sep+arch_negocio)
             if os.path.exists(Base_dir+os.sep+arch_negocio) == True:
                 band_arch='V'
                 df_negocio=alg.Rexcel_wpd(Base_dir,arch_negocio,sheet_name)
             else:
                 print('''No se pudo encontrar el archivo''')
+        
+#        print('salio')
     except Exception as msg:
         print(msg)
     #==============================================================================
     # BRIEFS
     #==============================================================================
     df_negocio=df_briefs(df_negocio)
-    df_negocio.to_csv(Work_Root+os.sep+'Briefs_sucios.csv',index=False,enconding='latin-1') #SE EXTRAE EL DATAFRAME A UN CSV        
+    try:
+        df_negocio.to_csv(Work_Root+os.sep+'Briefs_sucios.csv',index=False,enconding='latin-1') #SE EXTRAE EL DATAFRAME A UN CSV        
+    except Exception as msg:
+        print(msg)
+        df_negocio.to_csv(Work_Root+os.sep+'Briefs_sucios.csv',index=False) #SE EXTRAE EL DATAFRAME A UN CSV        
     #==============================================================================
     # BONOS
     #==============================================================================
     df_bonos=df_BONOS(df_negocio)
-    df_bonos[['BRIEF_ID','ESTADO','NOMBRE_PRODUCTO','DESCRIPCION','NO_BENEFICIOS_INICIALES','BENEFICIOS_EXISTENTES',
-               'CATEGORIA_PRODUCTO','FECHA_INICIO_VIGENCIA','FECHA_FINAL_VIGENCIA','TIPO','PROVEEDOR','CATEGORIA','TIPO_PRODUCTO',
-               'LINEA_PRODUCTOS','DISPONIBLE_PARA_PEDIDO']].to_csv(Work_Root+os.sep+'Productos_Bono.csv',index=False,enconding='latin-1') 
+    try:
+        df_bonos[['BRIEF_ID','ESTADO','NOMBRE_PRODUCTO','DESCRIPCION','NO_BENEFICIOS_INICIALES','BENEFICIOS_EXISTENTES',
+                   'CATEGORIA_PRODUCTO','FECHA_INICIO_VIGENCIA','FECHA_FINAL_VIGENCIA','TIPO','PROVEEDOR','CATEGORIA','TIPO_PRODUCTO',
+                   'LINEA_PRODUCTOS','DISPONIBLE_PARA_PEDIDO']].to_csv(Work_Root+os.sep+'Productos_Bono.csv',index=False,enconding='latin-1') 
+    except Exception as msg:
+        print(msg)
+        df_bonos[['BRIEF_ID','ESTADO','NOMBRE_PRODUCTO','DESCRIPCION','NO_BENEFICIOS_INICIALES','BENEFICIOS_EXISTENTES',
+                   'CATEGORIA_PRODUCTO','FECHA_INICIO_VIGENCIA','FECHA_FINAL_VIGENCIA','TIPO','PROVEEDOR','CATEGORIA','TIPO_PRODUCTO',
+                   'LINEA_PRODUCTOS','DISPONIBLE_PARA_PEDIDO']].to_csv(Work_Root+os.sep+'Productos_Bono.csv',index=False) 
     #==============================================================================
     # CRITERIOS
     #==============================================================================

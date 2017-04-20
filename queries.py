@@ -183,7 +183,11 @@ def queries_base(Work_Root):
     print('Inicio de extraccion datos de la BD....')
     
     df_briefs=pd.read_sql(qry_br_extractor,db,index_col=None) #DataFrame contiene los Briefs de la consulta
-    df_briefs.to_csv('Briefs_sucios.csv',index=False,enconding='latin-1') #SE EXTRAE EL DATAFRAME A UN CSV
+    try:
+        df_briefs.to_csv('Briefs_sucios.csv',index=False,enconding='latin-1') #SE EXTRAE EL DATAFRAME A UN CSV
+    except Exception as msg:
+        print(msg)
+        df_briefs.to_csv('Briefs_sucios.csv',index=False)
         
     ##############################################TRABAJAR PRODUCTOS BONOS DE LOS BRIEFS
     c.execute(qry_Bonos)
@@ -259,10 +263,15 @@ def queries_base(Work_Root):
     bonos.loc[bonos['CATEGORIA']=='None','CATEGORIA']=''
     bonos.loc[bonos['TIPO_PRODUCTO']=='None','TIPO_PRODUCTO']=''
     bonos.loc[bonos['MARCA_EXTERNA']=='None','MARCA_EXTERNA']=''
-    bonos[['BRIEF_ID','ESTADO','NOMBRE_PRODUCTO','DESCRIPCION','NO_BENEFICIOS_INICIALES','BENEFICIOS_EXISTENTES',
+    try:
+        bonos[['BRIEF_ID','ESTADO','NOMBRE_PRODUCTO','DESCRIPCION','NO_BENEFICIOS_INICIALES','BENEFICIOS_EXISTENTES',
            'CATEGORIA_PRODUCTO','FECHA_INICIO_VIGENCIA','FECHA_FINAL_VIGENCIA','TIPO','PROVEEDOR','CATEGORIA','TIPO_PRODUCTO',
            'LINEA_PRODUCTOS','DISPONIBLE_PARA_PEDIDO']].to_csv('Productos_Bono.csv',index=False,enconding='latin-1')    
-        
+    except Exception as msg:
+        print(msg)
+        bonos[['BRIEF_ID','ESTADO','NOMBRE_PRODUCTO','DESCRIPCION','NO_BENEFICIOS_INICIALES','BENEFICIOS_EXISTENTES',
+           'CATEGORIA_PRODUCTO','FECHA_INICIO_VIGENCIA','FECHA_FINAL_VIGENCIA','TIPO','PROVEEDOR','CATEGORIA','TIPO_PRODUCTO',
+           'LINEA_PRODUCTOS','DISPONIBLE_PARA_PEDIDO']].to_csv('Productos_Bono.csv',index=False)    
         
     ##############################################TRABAJAR CRITERIOS POR CADA BRIEF
     

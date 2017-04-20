@@ -4,13 +4,28 @@ Created on Thu Dec  1 12:06:59 2016
 
 @author: AAREYESC
 """
-import cx_Oracle as cx
-import pandas as pd
 import os
-import sqlite3
 from dateutil import parser
+import time
+import pandas as pd
+import codecs
+import cx_Oracle as cx
+import sqlite3
 
+fecha=time.strftime("%x")
+hora= time.strftime("%X")
 os.environ['NLS_LANG'] ='.UTF8'
+socket='''crmpdb-scan.puerto.liverpool.com.mx:1527/CRMP'''
+
+def escribe_log(texto,path=os.getcwd(),tema='',extencion='txt'):
+    archi=codecs.open(path+os.sep+dar_nombre('log',tema,extencion),'a','utf8')
+    archi.write(str(texto))
+    archi.write('\r\n')
+    return()
+
+def dar_nombre(subtema,tema,extencion):
+    nombre=str(subtema)+'_'+str(fecha).replace('/','-')+'_'+str(tema)+'.'+str(extencion)
+    return(nombre)
 
 def concat_hyphen(seq):
     p='-'
@@ -48,7 +63,7 @@ def Identifying_TBname(tb_name):
     fin=len(D)-1
     return(D[fin])
 
-def asking_data_connection_orcl(cve):
+def asking_data_connection_orcl(cve=''):
     if cve == '':
         cons=pd.read_csv('connection_file.csv')
         return(cons)

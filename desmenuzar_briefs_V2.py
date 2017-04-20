@@ -14,7 +14,7 @@ os.environ['NLS_LANG'] ='.UTF8'
 
 def prueba_conexion():
     try:
-        cx_Oracle.connect('USR_TOKEN','UsR_l1VT0K1982','172.16.203.135:1527/CRMQ')#CRM_PRODUCCION
+        cx_Oracle.connect('USR_INMERCADOS','Liverpool02','crmpdb-scan.puerto.liverpool.com.mx:1527/CRMP')#CRM_PRODUCCION
         return(1)
     except Exception as rep:
         return(0)
@@ -70,11 +70,14 @@ def desmenuzar_brief(Work_Root,Cataloges_Root):
                 #print (str(interm[band]).strip())
                 new_array2+=[str(interm[band]).strip()]
                 band=band+1
-                
         dict_ind_gal={
         'BRIEF_ID': pd.Series(new_array1),'CC':pd.Series(new_array2)
         }
-        ind_gal=pd.DataFrame(dict_ind_gal)
+        try:
+            ind_gal=pd.DataFrame(dict_ind_gal)
+        except Exception as msg:
+            print(msg)
+            
         
      
     ##############################TRABAJAR SOBRE Las mecanicas de la promocion#####
@@ -128,20 +131,20 @@ def desmenuzar_brief(Work_Root,Cataloges_Root):
 if __name__ == "__main__":
     desmenuzar_brief(
                      Work_Root=os.getcwd()+os.sep,
-                     Cataloges_Root="C:\\Program Files\\Anaconda3\\Desarrollo_Andres\\Inmobiliaria\\Automatizacion de analiticos\\Catalogos_base\\"
+                     Cataloges_Root=os.getcwd()+os.sep+"Catalogos_base"
                      )
 
     
 def Consecutivo_global(x):
     try:
-        db=cx_Oracle.connect('USR_TOKEN','UsR_l1VT0K1982','172.16.203.135:1527/CRMQ')#CRM_PRODUCCION
+        db=cx_Oracle.connect('USR_INMERCADOS','Liverpool02','crmpdb-scan.puerto.liverpool.com.mx:1527/CRMP')
         c=db.cursor()
         cns_qry1='''
     select  NVL(Global_CNS,0) from
         (
         SELECT MAX(cast(SUBSTR(NAME,(INSTR(NAME,'-',-1)+1),cast(length(NAME) as numeric(20,0))-cast(INSTR(NAME,'-',-1) as numeric(20,0))) as integer)) as Global_CNS
         FROM SIEBEL.S_LOY_PROMO
-        where LOY_PROG_ID = '1-5FTBH7Z' AND NAME LIKE 'I%' and SUBSTR(NAME,-1,1) in ('1','2','3','4','5','6','7','8','9','0')    
+        where LOY_PROG_ID = '1-6VA2A1' AND NAME LIKE 'I%' and SUBSTR(NAME,-1,1) in ('1','2','3','4','5','6','7','8','9','0')    
     '''
         t_qry=cns_qry1+" and name like '"+x+"%'"+')'
         c.execute(t_qry)
@@ -168,12 +171,15 @@ def Calculo_NPromoProd(Work_Root):
     cns=1
     lst_cns=[]
     ABREVIATURA=[]
-    band_conn=prueba_conexion()    
+    band_conn=prueba_conexion()
+    if band_conn == 0:
+        print('Prueba de Conexion fallida se procedera con calculo de consecutivos local solamente...')
     for i in s:
+        cnst=0
         if i == None:
             continue
-        if  i['BRIEF_ID'] in BRIEF_ID_NPromo and 'I'+i['ANIO'].replace('.0','')+'-'+i['ABREVIATURA']+'-'+i['ABREVIACION']+'-'+i['MECANICA PROMOCIONES']+'-' in NPromocion:
-            cns=cns-1
+#        if  i['BRIEF_ID'] in BRIEF_ID_NPromo and 'I'+i['ANIO'].replace('.0','')+'-'+i['ABREVIATURA']+'-'+i['ABREVIACION']+'-'+i['MECANICA PROMOCIONES']+'-' in NPromocion:
+#            cns=cns-1
         if len(NPromocion) > 0:
             if 'I'+i['ANIO'].replace('.0','')+'-'+i['ABREVIATURA']+'-'+i['ABREVIACION']+'-'+i['MECANICA PROMOCIONES']+'-' in NPromocion:
                 cns=cns+1
@@ -183,19 +189,20 @@ def Calculo_NPromoProd(Work_Root):
             cns=1
         BRIEF_ID_NPromo+=[i['BRIEF_ID']]
         NPromocion+=['I'+i['ANIO'].replace('.0','')+'-'+i['ABREVIATURA']+'-'+i['ABREVIACION']+'-'+i['MECANICA PROMOCIONES']+'-']
-#        print('nombre promocion: ','I'+i['ANIO'].replace('.0','')+'-'+i['ABREVIATURA']+'-'+i['ABREVIACION']+'-'+i['MECANICA PROMOCIONES']+'-')
-#        print('consecutivo 1: ',cns)
+        print('nombre promocion: ','I'+i['ANIO'].replace('.0','')+'-'+i['ABREVIATURA']+'-'+i['ABREVIACION']+'-'+i['MECANICA PROMOCIONES']+'-')
+        print('consecutivo 1: ',cns)
         NPMecanica+=[i['ABREVIATURA']+'-'+i['ANIO'].replace('.0','')+i['ABREVIACION']+'-'+i['MECANICA PRODUCTOS MECANICA']+'-']
         #Punto de mejora (consultar una sola vez a la BD por todos los iguales)
-        if i['ABREVIATURA'] is None or i['ABREVIATURA'] is None or i['ABREVIACION'] is None or i['MECANICA PROMOCIONES'] is None:
+        if i['ABREVIATURA'] is None or i['ABREVIACION'] is None or i['MECANICA PROMOCIONES'] is None:
             cns2=0
         elif band_conn == 0:
             cns2=0
         else:
             cns2=Consecutivo_global('I'+i['ANIO'].replace('.0','')+'-'+i['ABREVIATURA']+'-'+i['ABREVIACION']+'-'+i['MECANICA PROMOCIONES']+'-')
         cnst=cns+cns2
-#        print('consecutivo 2:',cns2)
-#        print(cnst)
+        print('consecutivo 1:',cns)
+        print('consecutivo 2:',cns2)
+        print(cnst)
         lst_cns+=[cnst]
         NPromocion_cns+=['I'+i['ANIO'].replace('.0','')+'-'+i['ABREVIATURA']+'-'+i['ABREVIACION']+'-'+i['MECANICA PROMOCIONES']+'-'+str(cnst)]
         NPMecanica_cns+=[i['ABREVIATURA']+'-'+i['ANIO'].replace('.0','')+i['ABREVIACION']+'-'+i['MECANICA PRODUCTOS MECANICA']+'-'+str(cnst)]
